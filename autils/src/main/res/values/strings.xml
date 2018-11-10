@@ -1,0 +1,59 @@
+<resources>
+    <string name="app_name">AUtils</string>
+
+    <string name="txt_qcode_resolve_faile">二维码解析失败</string>
+
+
+    <!-- 二维码扫描-->
+    <string name="input">手动输入</string>
+    <string name="turn_on_flash">打开</string>
+    <string name="cancel_finish">取    消</string>
+    <string name="flash">闪光灯</string>
+    <string name="turn_off_flash">关闭</string>
+    <string name="input_isbn">手动输入ISBN号</string>
+    <string name="input_isbn_hint">请输入ISBN号</string>
+    <string name="search">搜  索</string>
+    <string name="ok">确认</string>
+    <string name="scan_tips">将二维码/条形码放入框内\n即可自动扫描</string>
+    <string name="album">相册</string>
+    <string name="scan_title">二维码扫描</string>
+    <string name="scan_empty">没有发现二维码/条形码</string>
+    <string name="tip">提示</string>
+    <string name="barcode_canner_title2">请开启摄像头权限</string>
+    <string name="msg_camera_framework_bug2">打开摄像头失败，请尝试在应用权限管理中开启%s的摄像头权限</string>
+    <string name="open_flash_light">打开手电筒</string>
+    <string name="close_flash_light">关闭手电筒</string>
+    <string name="scan_and_scan">扫一扫</string>
+
+
+    <!-- 录制视频-->
+    <string name="record_video">录制视频</string>
+    <string name="run_compress_command">运行压缩命令</string>
+    <string name="no_video_tips">视频文件不存在,请先录制视频</string>
+    <string name="fail_when_camera_try_autofocus">对焦失败:%1$s</string>
+    <string name="dont_have_camera_error">对不起,没有发现摄像头,请检查</string>
+    <string name="only_have_one_camera">对不起,您只有一个摄像头,无法切换</string>
+    <string name="video_captured">视频已成功录制</string>
+    <string name="camera_init_fail">摄像头初始化失败</string>
+    <string name="dont_have_front_camera">当前设备没有前置摄像头</string>
+    <string name="changing_flashLight_mode">切换闪光灯模式失败</string>
+    <string name="open_video">打开视频</string>
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+    <string name="compress_result_input_output">输入:%1$s,大小:%2$s,输出:%3$s,大小:%4$s</string>
+    <string name="path">视频路径:%1$s,大小:%2$s</string>
+    <string name="dont_have_app_to_open_file">没有支持此格式的播放器</string>
+    <string name="txt_set">现在设置</string>
+    <string name="permission_denied_tips">使用[%s]需要授予必要的使用权限哦</string>
+    <string name="permission_deniedforever_tips">您拒绝了[%s]必要的使用权限，请到 应用-权限 去授予</string>
+    <string name="txt_retry">点我重试！</string>
+    <string name="txt_net_error_tips">网络异常，请检查网络或联系系统管理员</string>
+
+
+    <string name="connect_error">网络连接失败,请检查网络</string>
+    <string name="connect_timeout">连接超时,请稍后再试</string>
+    <string name="bad_network">服务器异常</string>
+    <string name="parse_error">解析服务器响应数据失败</string>
+    <string name="unknown_error">未知错误</string>
+    <string name="response_return_error">服务器返回数据失败</string>
+</resources>

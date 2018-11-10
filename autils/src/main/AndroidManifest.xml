@@ -1,0 +1,30 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.wugx_autils">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <application>
+        <activity
+            android:name=".zxing.CustomScanActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity
+            android:name=".zxing.ISBNActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity
+            android:name=".util.camera.CameraActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+
+        </provider>
+
+
+    </application>
+</manifest>

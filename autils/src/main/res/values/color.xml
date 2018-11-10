@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="transparent_black">#aa000000</color>
+    <color name="scan_corner_color">#0effc2</color>
+    <color name="color_333333">#333333</color>
+
+    <color name="input_text_hint_color">#cccccc</color>
+    <color name="chaoxing_scan_blue">#0099ff</color>
+    <color name="gray_999999">#999999</color>
+</resources>
