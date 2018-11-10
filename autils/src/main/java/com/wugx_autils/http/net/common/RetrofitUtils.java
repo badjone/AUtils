@@ -56,6 +56,13 @@ public class RetrofitUtils {
                 .baseUrl(baseUrl);
     }
 
+    /**
+     * 增加 factory
+     *
+     * @param baseUrl
+     * @param factory
+     * @return
+     */
     public static Retrofit.Builder getRetrofitBuilder(String baseUrl, Converter.Factory factory) {
 //        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").serializeNulls().create();
         OkHttpClient okHttpClient = RetrofitUtils.getOkHttpClientBuilder().build();
