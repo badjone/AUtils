@@ -19,7 +19,7 @@ package com.wugx_autils.http.net.converter;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
-import com.wugx_utils.entity.BasicBean;
+import com.wugx_autils.http.net.common.BasicBean;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
