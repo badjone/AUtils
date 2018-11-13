@@ -8,7 +8,6 @@ import com.wugx_autils.http.net.upload.UploadProgressListener;
 import com.wugx_autils.http.net.upload.UploadProgressRequestBody;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -71,15 +70,16 @@ public class UploadFileUtils {
         builder.addFormDataPart(fileKey, file.getName(), uploadProgressRequestBody);
         List<MultipartBody.Part> partList = builder.build().parts();
 
-        RetrofitHelper.getApiService()
+
+        AUtilsHelper.getApiService(AUtilsApi.class,Constants.BASE_URL,null)
                 .uploadFiles(url, partList)
                 .subscribeOn(Schedulers.io())
-                .compose(ba.<BasicBean>bindToLifecycle())
+                .compose(ba.<Object>bindToLifecycle())
 //                .compose(ProgressUtils.<BasicBean>applyProgressBar(ba, "上传文件中..."))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DefaultObserver<BasicBean>() {
+                .subscribe(new DefaultObserver<Object>() {
                     @Override
-                    public void onSuccess(BasicBean response) {
+                    public void onSuccess(Object response) {
                         dialog.dismiss();
                         listener.success(response);
 //                        ToastUtils.show("文件上传成功");
@@ -98,34 +98,34 @@ public class UploadFileUtils {
     /**
      * 单文件上传 方法二
      */
-    public static void uploadFile2(BaseActivity ba, String url, String fileKey, File file, Map<String, String> parms, final UpFileProgressListener listener) {
-        //  图片参数
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part fileBody = MultipartBody.Part.createFormData(fileKey, file.getName(), requestFile);
-
-        Map<String, RequestBody> upLoadMap = new HashMap<>();
-        for (String parmKey : parms.keySet()) {
-            upLoadMap.put(parmKey, RequestBody.create(MediaType.parse("multipart/form-data"), parms.get(parmKey)));
-        }
-        RetrofitHelper.getApiService()
-                .uploadFiles(url, upLoadMap, fileBody)
-                .subscribeOn(Schedulers.io())
-                .compose(ba.<BasicBean>bindToLifecycle())
-                .compose(ProgressUtils.<BasicBean>applyProgressBar(ba, "上传文件..."))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DefaultObserver<BasicBean>() {
-                    @Override
-                    public void onSuccess(BasicBean response) {
-                        listener.success(response);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        listener.failure();
-                    }
-                });
-    }
+//    public static void uploadFile2(BaseActivity ba, String url, String fileKey, File file, Map<String, String> parms, final UpFileProgressListener listener) {
+//        //  图片参数
+//        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+//        MultipartBody.Part fileBody = MultipartBody.Part.createFormData(fileKey, file.getName(), requestFile);
+//
+//        Map<String, RequestBody> upLoadMap = new HashMap<>();
+//        for (String parmKey : parms.keySet()) {
+//            upLoadMap.put(parmKey, RequestBody.create(MediaType.parse("multipart/form-data"), parms.get(parmKey)));
+//        }
+//        RetrofitHelper.getApiService()
+//                .uploadFiles(url, upLoadMap, fileBody)
+//                .subscribeOn(Schedulers.io())
+//                .compose(ba.<BasicBean>bindToLifecycle())
+//                .compose(ProgressUtils.<BasicBean>applyProgressBar(ba, "上传文件..."))
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new DefaultObserver<BasicBean>() {
+//                    @Override
+//                    public void onSuccess(BasicBean response) {
+//                        listener.success(response);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        super.onError(e);
+//                        listener.failure();
+//                    }
+//                });
+//    }
 
     public interface UpFileProgressListener<T> {
         void progress(int progress);

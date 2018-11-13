@@ -3,7 +3,6 @@ package com.wugx_autils.http.net.common;
 import com.blankj.utilcode.util.Utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.wugx_autils.http.net.converter.GsonConverterFactory;
 import com.wugx_autils.http.net.interceptor.CommonParamsInterceptor;
 import com.wugx_autils.http.net.interceptor.HttpCacheInterceptor;
 import com.wugx_autils.http.net.interceptor.HttpHeaderInterceptor;
@@ -16,6 +15,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
@@ -46,15 +46,15 @@ public class RetrofitUtils {
                 .cache(cache);
     }
 
-    public static Retrofit.Builder getRetrofitBuilder(String baseUrl) {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").serializeNulls().create();
-        OkHttpClient okHttpClient = RetrofitUtils.getOkHttpClientBuilder().build();
-        return new Retrofit.Builder()
-                .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .baseUrl(baseUrl);
-    }
+//    public static Retrofit.Builder getRetrofitBuilder(String baseUrl) {
+//        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").serializeNulls().create();
+//        OkHttpClient okHttpClient = RetrofitUtils.getOkHttpClientBuilder().build();
+//        return new Retrofit.Builder()
+//                .client(okHttpClient)
+//                .addConverterFactory(GsonConverterFactory.create(gson))
+//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                .baseUrl(baseUrl);
+//    }
 
     /**
      * 增加 factory
@@ -64,11 +64,11 @@ public class RetrofitUtils {
      * @return
      */
     public static Retrofit.Builder getRetrofitBuilder(String baseUrl, Converter.Factory factory) {
-//        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").serializeNulls().create();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").serializeNulls().create();
         OkHttpClient okHttpClient = RetrofitUtils.getOkHttpClientBuilder().build();
         return new Retrofit.Builder()
                 .client(okHttpClient)
-                .addConverterFactory(factory)
+                .addConverterFactory(factory == null ? GsonConverterFactory.create(gson) : factory)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl(baseUrl);
     }

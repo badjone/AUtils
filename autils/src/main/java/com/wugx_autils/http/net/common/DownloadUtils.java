@@ -40,7 +40,7 @@ public class DownloadUtils {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getObserver());
     }
-
+    
     /**
      * 取消下载
      */
@@ -48,14 +48,15 @@ public class DownloadUtils {
         mDisposables.clear();
     }
 
-    private Api getApiService() {
+    private AUtilsApi getApiService() {
         OkHttpClient.Builder httpClientBuilder = RetrofitUtils.getOkHttpClientBuilder();
         ProgressHelper.addProgress(httpClientBuilder);
 
-        Api api = RetrofitUtils.getRetrofitBuilder(Constants.BASE_URL)
+        AUtilsApi api = RetrofitUtils.getRetrofitBuilder(Constants.BASE_URL, null)
                 .client(httpClientBuilder.build())
                 .build()
-                .create(Api.class);
+                .create(AUtilsApi.class);
+
         ProgressHelper.setProgressHandler(new DownloadProgressHandler() {
             @Override
             protected void onProgress(long bytesRead, long contentLength, boolean done) {

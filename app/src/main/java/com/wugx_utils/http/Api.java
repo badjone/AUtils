@@ -42,8 +42,8 @@ public interface Api {
      * @return
      */
     @Multipart
-    @POST("userMember/headImgUrl.do")
-    Observable<BasicBean> uploadFiles(/*@Url String url,*/ @Part List<MultipartBody.Part> partList);
+    @POST()
+    Observable<BasicBean> uploadFiles(@Url String url, @Part List<MultipartBody.Part> partList);
 
     /**
      * 单文件上传 方法二

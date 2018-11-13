@@ -20,6 +20,8 @@ import com.wugx_autils.callback.ErrorCallback;
 import com.wugx_autils.callback.LoadingCallback;
 import com.wugx_autils.callback.TimeoutCallback;
 
+import retrofit2.Converter;
+
 /**
  * @author Wugx
  * @date 2018/11/10
@@ -27,6 +29,7 @@ import com.wugx_autils.callback.TimeoutCallback;
 public class Autils {
     private static Autils mAutils;
     public String baseUrl;
+    public Converter.Factory factory;
 
     public static Autils getInstance() {
         if (mAutils == null) {
@@ -37,14 +40,24 @@ public class Autils {
         return mAutils;
     }
 
-    public void setHostUrl(String baseUrl) {
-        this.baseUrl = baseUrl;
-    }
-
     public void init(Application application) {
         Utils.init(application);
         initLoad();
         initSmartRefreshLayout();
+    }
+
+
+    public void setHostUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+    /**
+     * 配置解析的gsonFactory
+     *
+     * @param factory
+     */
+    public void setFactory(Converter.Factory factory) {
+        this.factory = factory;
     }
 
     private void initLoad() {
