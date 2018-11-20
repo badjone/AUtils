@@ -24,9 +24,10 @@ import retrofit2.HttpException;
  */
 
 public abstract class DefaultObserver<T> implements Observer<T> {
+    private  Disposable mDisposable;
     @Override
     public void onSubscribe(Disposable d) {
-
+        mDisposable=d;
     }
 
     @Override
@@ -57,10 +58,12 @@ public abstract class DefaultObserver<T> implements Observer<T> {
             onException(ExceptionReason.UNKNOWN_ERROR);
         }
         onFinish();
+        if(mDisposable!=null)mDisposable.dispose();
     }
 
     @Override
     public void onComplete() {
+        if(mDisposable!=null)mDisposable.dispose();
     }
 
     /**
@@ -111,6 +114,7 @@ public abstract class DefaultObserver<T> implements Observer<T> {
                 ToastUtils.showShort(R.string.unknown_error);
                 break;
         }
+        if(mDisposable!=null)mDisposable.dispose();
     }
 
     /**

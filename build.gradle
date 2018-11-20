@@ -13,12 +13,19 @@ buildscript {
 
 //        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath 'com.jakewharton:butterknife-gradle-plugin:9.0.0-rc1'
+
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2' // add plugin
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
 
-        // 添加下面两行代码即可。
+//        // 添加下面两行代码即可。
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+//        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+
+//        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:latest.integration'
+//        classpath "com.github.dcendents:android-maven-gradle-plugin:latest.integration"
+
+        classpath 'com.novoda:bintray-release:0.8.0'
     }
 }
 
@@ -28,6 +35,14 @@ allprojects {
         jcenter()
         mavenCentral()
         maven { url "https://jitpack.io" }
+    }
+    tasks.withType(Javadoc) {
+        options {
+            encoding "UTF-8"
+            charSet 'UTF-8'
+            links "http://docs.oracle.com/javase/7/docs/api"
+            failOnError false
+        }
     }
 }
 

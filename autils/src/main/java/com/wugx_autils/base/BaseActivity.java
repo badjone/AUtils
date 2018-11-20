@@ -73,7 +73,7 @@ public abstract class BaseActivity<V, P extends BasePresenter> extends RxAppComp
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1);
-        View contentLayout =getLayoutInflater().inflate(getLayoutId(), null);
+        View contentLayout = getLayoutInflater().inflate(getLayoutId(), null);
         if (isShowTitle()) {
             View layout_title = View.inflate(this, R.layout.layout_title, null);
             ViewGroup.LayoutParams p = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);

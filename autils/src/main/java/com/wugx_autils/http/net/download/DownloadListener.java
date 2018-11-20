@@ -1,6 +1,6 @@
 package com.wugx_autils.http.net.download;
 
-import okhttp3.ResponseBody;
+import java.io.File;
 
 /**
  * Created by zhpan on 2018/3/21.
@@ -9,7 +9,7 @@ import okhttp3.ResponseBody;
 public interface DownloadListener {
     void onProgress(int progress);
 
-    void onSuccess(ResponseBody responseBody);
+    void onSuccess(File file);
 
     void onFail(String message);
 

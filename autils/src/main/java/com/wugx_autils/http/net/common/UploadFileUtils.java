@@ -16,6 +16,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.Converter;
 
 /**
  * @author Wugx
@@ -34,7 +35,9 @@ public class UploadFileUtils {
      * @param listener
      */
     public static void uploadFile(BaseActivity ba, String url, String fileKey, File file,
-                                  Map<String, String> parms, final UpFileProgressListener listener) {
+                                  Map<String, String> parms, Converter.Factory factory,
+                                  final UpFileProgressListener listener) {
+
         final MaterialDialog dialog = new DialogUtils().showFileProgressBar(ba);
 
         MultipartBody.Builder builder = new MultipartBody.Builder()
@@ -49,11 +52,12 @@ public class UploadFileUtils {
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         //显示上传进度
         UploadProgressRequestBody uploadProgressRequestBody = new UploadProgressRequestBody(requestBody, new UploadProgressListener() {
+
             long time = System.currentTimeMillis();
 
             @Override
-            public void onProgress(long currentBytesCount, long totalBytesCount) {
-                //100毫秒更新一次
+            public void onProgress(final long currentBytesCount, final long totalBytesCount) {
+//                //100毫秒更新一次
                 if ((System.currentTimeMillis() - time) > 100) {
                     int progress = (int) (((float) currentBytesCount / (float) totalBytesCount) * 100);
                     dialog.setProgress(progress);
@@ -69,9 +73,7 @@ public class UploadFileUtils {
 
         builder.addFormDataPart(fileKey, file.getName(), uploadProgressRequestBody);
         List<MultipartBody.Part> partList = builder.build().parts();
-
-
-        AUtilsHelper.getApiService(AUtilsApi.class,Constants.BASE_URL,null)
+        AUtilsHelper.getApiService(AUtilsApi.class, Constants.BASE_URL, factory)
                 .uploadFiles(url, partList)
                 .subscribeOn(Schedulers.io())
                 .compose(ba.<Object>bindToLifecycle())
@@ -82,7 +84,6 @@ public class UploadFileUtils {
                     public void onSuccess(Object response) {
                         dialog.dismiss();
                         listener.success(response);
-//                        ToastUtils.show("文件上传成功");
                     }
 
                     @Override
@@ -93,7 +94,6 @@ public class UploadFileUtils {
                     }
                 });
     }
-
 
     /**
      * 单文件上传 方法二

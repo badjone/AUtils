@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.kingja.loadsir:loadsir-1.3.6">
+    <CLASSES>
+      <root url="jar://E:/studioCache/.gradle/caches/transforms-1/files-1.1/loadsir-1.3.6.aar/68ea898544fab2064d7e09cf9dbe9578/jars/classes.jar!/" />
+      <root url="file://E:/studioCache/.gradle/caches/transforms-1/files-1.1/loadsir-1.3.6.aar/68ea898544fab2064d7e09cf9dbe9578/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://E:/studioCache/.gradle/caches/modules-2/files-2.1/com.kingja.loadsir/loadsir/1.3.6/516bbd67e62f897651e9828219193b5f386956ac/loadsir-1.3.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -40,24 +40,27 @@ public class Autils {
         return mAutils;
     }
 
-    public void init(Application application) {
+
+//    public Autils(String baseUrl, Converter.Factory factory) {
+//        this.baseUrl = baseUrl;
+//        this.factory = factory;
+//    }
+
+    public Autils init(Application application) {
         Utils.init(application);
         initLoad();
         initSmartRefreshLayout();
+        return this;
     }
 
-
-    public void setHostUrl(String baseUrl) {
+    public Autils setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
+        return this;
     }
 
-    /**
-     * 配置解析的gsonFactory
-     *
-     * @param factory
-     */
-    public void setFactory(Converter.Factory factory) {
+    public Autils setFactory(Converter.Factory factory) {
         this.factory = factory;
+        return this;
     }
 
     private void initLoad() {
@@ -93,25 +96,38 @@ public class Autils {
             }
         });
     }
-//    static {
-//        //设置全局的Header构建器
-//        SmartRefreshLayout.setDefaultRefreshHeaderCreator(new DefaultRefreshHeaderCreator() {
-//            @Override
-//            public RefreshHeader createRefreshHeader(Context context, RefreshLayout layout) {
-////                layout.setPrimaryColorsId(R.color.grey_f2f2f2, android.R.color.darker_gray);//全局设置主题颜色
-////                return new ClassicsHeader(context);//.setTimeFormat(new DynamicTimeFormat("更新于 %s"));//指定为经典Header，默认是 贝塞尔雷达Header
+
+
+//    public static class Builder {
+//        private String baseUrl;
+//        private Converter.Factory factory;
+//        private Application mApplication;
 //
-//                return new FalsifyHeader(context);
-//            }
-//        });
-//        //设置全局的Footer构建器
-//        SmartRefreshLayout.setDefaultRefreshFooterCreator(new DefaultRefreshFooterCreator() {
-//            @Override
-//            public RefreshFooter createRefreshFooter(Context context, RefreshLayout layout) {
-//                //指定为经典Footer，默认是 BallPulseFooter
-////                return new ClassicsFooter(context).setDrawableSize(20);
-//                return new FalsifyFooter(context);
-//            }
-//        });
+//        public Builder init(Application application) {
+//            this.mApplication = application;
+//            return this;
+//        }
+//
+//        public Builder setBaseUrl(String baseUrl) {
+//            this.baseUrl = baseUrl;
+//            return this;
+//        }
+//
+//        public String getBaseUrl() {
+//            return baseUrl;
+//        }
+//
+//        public Builder setFactory(Converter.Factory factory) {
+//            this.factory = factory;
+//            return this;
+//        }
+//
+//        public Autils build() {
+//            Autils autils = new Autils(this.baseUrl, this.factory);
+//            autils.init(mApplication);
+//            autils.initLoad();
+//            autils.initSmartRefreshLayout();
+//            return autils;
+//        }
 //    }
 }

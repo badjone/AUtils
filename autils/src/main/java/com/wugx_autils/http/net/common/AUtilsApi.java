@@ -50,7 +50,7 @@ public interface AUtilsApi {
      */
     @Multipart
     @POST(/*"upload/uploadFile.do"*/)
-    Observable<String> uploadFiles(@Url String url, @PartMap Map<String, RequestBody> map, @Part MultipartBody.Part image);
+    Observable<String> uploadFiles(@Url String url, @PartMap Map<String, RequestBody> map, @Part MultipartBody.Part file);
 
 
 //

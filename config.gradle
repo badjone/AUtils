@@ -1,12 +1,27 @@
 ext {
 
     android = [
+            applicationId    : 'com.wugx_utils',
             compileSdkVersion: 28,
             buildToolsVersion: "28.0.0",
-            minSdkVersion    : 14,
+            minSdkVersion    : 16,
             targetSdkVersion : 27,
-            versionCode      : 156,
-            versionName      : "2.4.1"
+            versionCode      : 1,
+            versionName      : "1.0.1"
+    ]
+
+    db = [
+            //数据库版本 用versionCode
+//            schemaVersion: android["versionCode"],
+            schemaVersion: 9,
+            daoPackage   : "${android["applicationId"]}.greendao",
+            targetGenDir : "src/main/java"
+    ]
+
+    push = [
+            //推送相关
+//            appKey: "07a0a4d247ffd40ec07fb7b7",
+//            master: " dd16f252349bd6d9a46ba7ea"
     ]
 
     version = [
@@ -22,6 +37,8 @@ ext {
             canarySdkVersion        : "1.5.4",
             dialogversion           : "0.9.6.0"
     ]
+
+
     dependencies = [
             //support
             "appcompat-v7"                 : "com.android.support:appcompat-v7:${version["androidSupportSdkVersion"]}",
@@ -82,6 +99,10 @@ ext {
             "rxcache2"                     : "com.github.VictorAlbertos.RxCache:runtime:1.8.3-2.x",
             "rxpermissions2"               : "com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar",
             "rxerrorhandler2"              : "me.jessyan:rxerrorhandler:2.1.1",
+
+            //database
+            "greendao"                     : 'org.greenrobot:greendao:3.2.2',
+            "greendao-generator"           : 'org.greenrobot:greendao-generator:3.2.2',
 
             //tools
             "dagger2"                      : "com.google.dagger:dagger:${version["dagger2SdkVersion"]}",
