@@ -7,8 +7,6 @@ package com.wugx_utils.entity;
 public class BasicBean<T> {
 
 
-
-
     public String code;
     public String msg;
     public T data;

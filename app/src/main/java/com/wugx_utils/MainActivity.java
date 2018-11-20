@@ -10,16 +10,34 @@ import android.widget.Button;
 import com.afollestad.materialdialogs.folderselector.FileChooserDialog;
 import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.wugx_autils.base.BaseActivity;
+import com.wugx_autils.http.net.common.Constants;
+import com.wugx_autils.http.net.common.DownloadUtils;
+import com.wugx_autils.http.net.common.UploadFileUtils;
+import com.wugx_autils.http.net.download.DownloadListener;
+import com.wugx_autils.http.net.exception.ServerResponseException;
 import com.wugx_autils.mvp.presenter.BasePresenter;
 import com.wugx_autils.util.CameraUtils;
-import com.wugx_autils.util.PermissionApply;
+import com.wugx_utils.db.DaoManager;
+import com.wugx_utils.db.UserData;
 import com.wugx_utils.entity.BasicBean;
-import com.wugx_utils.http.UploadFileUtils;
+import com.wugx_utils.entity.LoginBean;
+import com.wugx_utils.entity.UserInfo;
+import com.wugx_utils.http.RetrofitHelper;
+import com.wugx_utils.http.converter.GsonConverterFactory;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity implements FileChooserDialog.FileCallback {
 
@@ -69,24 +87,179 @@ public class MainActivity extends BaseActivity implements FileChooserDialog.File
 //                        .show(MainActivity.this); // an AppCompatActivity which implements FileCallback
 
 
-                CameraUtils.toGallery(new PermissionApply.CameraPermissionListener() {
-                    @Override
-                    public void success(Intent intent) {
-                        startActivityForResult(intent, 7);
-                    }
-                });
-//获取父目录  
+//                CameraUtils.toGallery(new PermissionApply.CameraPermissionListener() {
+//                    @Override
+//                    public void success(Intent intent) {
+//                        startActivityForResult(intent, 7);
+//                    }
+//                });
 
-
-//                http:
-////218.240.149.148:10100/userMember/headImgUrl.do
-//
-//                token = ad0619c9 - 9e03 - 42d 6 - 8 af9 - fcb77c1824d7 memberId = 16
-//                deviceId = c4 % 3 A0b % 3 Acb % 3 A84 % 3 A97 % 3 A70
-
+                //测试下载
+//                downLoadApk();
+                testlogin();
+//                initDb();
 
             }
         });
+    }
+
+    private void initDb() {
+//        DaoManager.getInstance().getDaoSession().getTestBeanDao().deleteAll();
+//
+////                testlogin();
+//        for (int i = 0; i < 5; i++) {
+//            TestBean testBean = new TestBean();
+////                    testBean.id=(long)i;
+//            testBean.name = "名称:" + i;
+//            testBean.count = i;
+//            DaoManager.getInstance().getDaoSession().getTestBeanDao().insertInTx(testBean);
+//        }
+//        List<TestBean> list = DaoManager.getInstance().getDaoSession()
+//                .queryBuilder(TestBean.class)
+//                .where(TestBeanDao.Properties.Count.gt(2))
+//                .list();
+//
+//        LogUtils.d("查询数据库>>>" + list.toString());
+
+
+//        DaoManager.getInstance().getDaoSession().getUserDataDao().deleteAll();
+        for (int i = 0; i < 5; i++) {
+            UserData userData = new UserData();
+//            userData.id = Long.valueOf(i);
+            userData.userId = "ID--" + i + 10;
+            userData.userToken = i;
+            DaoManager.getInstance().getDaoSession().getUserDataDao().insertOrReplace(userData);
+        }
+        List<UserData> list = DaoManager.getInstance().getDaoSession()
+                .queryBuilder(UserData.class).list();
+
+        LogUtils.d(">>>" + list.toString());
+    }
+
+    /**
+     * 测试登陆
+     */
+    private void testlogin() {
+        //牧场登陆测试...
+        String url = "mobleClaim/login.do";
+        Map<String, String> map = new HashMap<>();
+        map.put("cellPhoneNum", "18219160104");
+        map.put("password", "123456");
+        map.put("deviceId", "c4:0b:cb:84:97:70");
+        map.put("registrationId", "140fe1da9e80bacb3a2");
+
+        //登陆嵌套获取用户信息
+        RetrofitHelper.getApiService(null)
+                .toLogin(url, map)
+                .subscribeOn(Schedulers.io())
+                .flatMap(new Function<LoginBean, ObservableSource<UserInfo>>() {
+                    @Override
+                    public ObservableSource<UserInfo> apply(LoginBean loginBean) throws Exception {
+                        LogUtils.d("登陆成功>>>" + loginBean.toString());
+                        if (!TextUtils.isEmpty(loginBean.getToken())) {
+                            //登陆成功
+                            return RetrofitHelper.getApiService().getUserMember(
+                                    loginBean.getToken(), loginBean.getMemberId(), "c4:0b:cb:84:97:70");
+                        } else {
+                            //登陆失败
+                            throw new ServerResponseException("登陆异常", "获取登陆用户信息失败");
+                        }
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<UserInfo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(UserInfo userInfo) {
+                        LogUtils.d("获取到用户信息>>" + userInfo.toString());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        LogUtils.d("onError>>" + e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    private void downLoadApk() {
+        String url = "https://raw.githubusercontent.com/badjone/CallApp/master/wifi_call_1.0.0.4.apk";
+
+        new DownloadUtils().download(Constants.BASE_URL, url, new DownloadListener() {
+            @Override
+            public void onProgress(int progress) {
+                LogUtils.d("onProgress>>" + progress);
+                mBtnCamera.setText("" + progress);
+            }
+
+            @Override
+            public void onSuccess(File file) {
+                LogUtils.d("onSuccess>>", FileUtils.isFileExists(file), FileUtils.getFileSize(file));
+                ToastUtils.showShort("下载完成拉>>>" + file.getAbsolutePath());
+
+            }
+
+            @Override
+            public void onFail(String message) {
+                LogUtils.d("onFail>>" + message);
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private void upload(File file) {
+        String uploadUrl = "http://116.95.255.211:10100/userMember/headImgUrl.do";
+        Map<String, String> map = new HashMap<>();
+        String token = "542d06a5-52c4-489b-b056-31e8a3a66bc3";
+        String memberId = "14";
+        String deviceId = "c4:0b:cb:84:97:70";
+        map.put("token", token);
+        map.put("memberId", memberId);
+        map.put("deviceId", deviceId);
+
+        UploadFileUtils.uploadFile(
+                this,
+                uploadUrl,
+                "uploadFile",
+                file,
+                map,
+                GsonConverterFactory.create(),
+                new UploadFileUtils.UpFileProgressListener() {
+                    @Override
+                    public void progress(int progress) {
+                        mBtnCamera.setText("" + progress);
+                    }
+
+                    @Override
+                    public void failure() {
+                        LogUtils.d("上传失败>>>");
+                        mBtnCamera.setText("failure");
+                    }
+
+                    @Override
+                    public void success(Object o) {
+                        if (o instanceof BasicBean) {
+                            BasicBean basicBean = (BasicBean) o;
+                            LogUtils.d("上传成功888>>>" + basicBean.msg);
+                        }
+
+                        LogUtils.d("上传成功>>>" + o);
+                        mBtnCamera.setText("成功" + o);
+                    }
+                });
     }
 
     @Override
@@ -140,7 +313,7 @@ public class MainActivity extends BaseActivity implements FileChooserDialog.File
             map.put("deviceId", "c4:0b:cb:84:97:70");
 
             if (!TextUtils.isEmpty(galleryPath)) {
-                UploadFileUtils.uploadFile(this, url, "uploadFile", new File(galleryPath), map,
+                UploadFileUtils.uploadFile(this, url, "uploadFile", new File(galleryPath), map, GsonConverterFactory.create(),
 
 //                        new UploadFileUtils.UpFileProgressListener() {
 //                    @Override
@@ -185,6 +358,8 @@ public class MainActivity extends BaseActivity implements FileChooserDialog.File
             if (data != null) {
                 String filPathLocal = CameraUtils.getGalleryPath(data);
                 LogUtils.d("获取到文件路径>>>", FileUtils.isFileExists(filPathLocal), filPathLocal);
+
+                upload(new File(filPathLocal));
             }
         }
     }

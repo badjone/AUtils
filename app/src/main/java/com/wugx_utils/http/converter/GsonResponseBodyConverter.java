@@ -27,8 +27,9 @@ import java.io.IOException;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
 
-import static com.wugx_utils.http.Constants.CODE_ERROR;
-import static com.wugx_utils.http.Constants.CODE_SUCCESS;
+import static com.wugx_autils.http.net.common.Constants.CODE_ERROR;
+import static com.wugx_autils.http.net.common.Constants.CODE_SUCCESS;
+
 
 final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, Object> {
 
@@ -41,23 +42,26 @@ final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, Obje
     @Override
     public Object convert(ResponseBody value) throws IOException {
         try {
-
-            BasicBean response = (BasicBean) adapter.fromJson(value.charStream());
-            if (response.code.equals(CODE_SUCCESS)) {
-                if (response.getData() != null) {
-                    return response.getData();
-                }else{
-                    return response;
-                }
+            BasicBean response = null;
+            try {
+                response = (BasicBean) adapter.fromJson(value.charStream());
+                if (response.code.equals(CODE_SUCCESS)) {
+                    if (response.getData() != null) {
+                        return response.getData();
+                    } else {
+                        return response;
+                    }
 //                else throw new NoDataExceptionException();
-            } else if (response.code.equals(CODE_ERROR)) {
-                throw new ServerResponseException(response.getCode(), response.getMsg());
-            } else {
-                LogUtils.d("response exception>>>>" + response.code);
-                // TODO: 2018/11/9 other
-                throw new NoDataExceptionException();
+                } else if (response.code.equals(CODE_ERROR)) {
+                    throw new ServerResponseException(response.getCode(), response.getMsg());
+                } else {
+                    LogUtils.d("response exception>>>>" + response.code);
+                    // TODO: 2018/11/9 other
+                    throw new NoDataExceptionException();
+                }
+            } catch (IOException e) {
+                return value.toString();
             }
-
         } finally {
             value.close();
         }
