@@ -29,7 +29,7 @@ android {
             // 不显示Log
             buildConfigField "boolean", "LOG_DEBUG", "false"
             //混淆
-            minifyEnabled true
+            minifyEnabled false
             //Zipalign优化
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
