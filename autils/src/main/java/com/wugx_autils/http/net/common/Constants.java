@@ -1,6 +1,6 @@
 package com.wugx_autils.http.net.common;
 
-import com.wugx_autils.Autils;
+import com.wugx_autils.AUtils;
 
 /**
  * @author Wugx
@@ -12,7 +12,7 @@ public interface Constants {
 
     String CODE_SUCCESS = "success";
     String CODE_ERROR = "error";
-    String BASE_URL = Autils.getInstance().baseUrl;
+    String BASE_URL = AUtils.getInstance().baseUrl;
 
 //    String DOWNLOAD_URL = "http://www.oitsme.com/download/oitsme.apk";
 

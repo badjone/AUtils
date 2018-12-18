@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import com.wugx_autils.callback.ErrorCallback;
 import com.wugx_autils.callback.LoadingCallback;
 import com.wugx_autils.mvp.presenter.BasePresenter;
 import com.wugx_autils.mvp.view.BaseView;
+import com.wugx_autils.util.UiUtils;
 
 import butterknife.ButterKnife;
 
@@ -104,7 +106,6 @@ public abstract class BaseActivity<V, P extends BasePresenter> extends RxAppComp
     }
 
     public void initListener() {
-
     }
 
     public boolean isRebound() {
@@ -126,10 +127,10 @@ public abstract class BaseActivity<V, P extends BasePresenter> extends RxAppComp
             setSupportActionBar(mToolbar);
             mActionBar = getSupportActionBar();
             mActionBar.setDisplayShowTitleEnabled(false);
-            if (mActionBar != null) {
-                //set back button
-                mActionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back);
-            }
+            //set back button
+            mActionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back);
+            //显示左侧返回按钮
+//            mActionBar.setDisplayHomeAsUpEnabled(true);
 
             String defaultTitle = getTitle().toString();
             if (TextUtils.isEmpty(defaultTitle)) {
@@ -140,30 +141,59 @@ public abstract class BaseActivity<V, P extends BasePresenter> extends RxAppComp
         }
     }
 
-
     public void setTitle(String title) {
         if (!isShowTitle()) return;
         if (tvTitle != null && !TextUtils.isEmpty(title)) {
             tvTitle.setText(title);
         }
-
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                //back button
-                finish();
-                break;
+        int i = item.getItemId();
+        if (i == android.R.id.home) {//back button
+            onBackPressed();
+//                finish();
+        } else if (i == R.id.menu_right) {
+            setTitleRightListener();
+        } else {
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_common, menu);
+        MenuItem item = menu.findItem(R.id.menu_right);
+        boolean showTitleRight = isShowTitleRight(item);
+        item.setVisible(showTitleRight);
+//        item.setIcon(ContextCompat.getDrawable(Utils.getApp(), android.R.drawable.ic_menu_add));
+        return true;
+    }
+
+    /**
+     * 是否显示右侧按钮
+     *
+     * @param item
+     * @return
+     */
+    public boolean isShowTitleRight(MenuItem item) {
+        //do some thing... eg 改变图标等等
+        return false;
+    }
+
+    /**
+     * toolbar右侧按钮点击事件简单调用，具体参见{@link Toolbar}
+     */
+    public void setTitleRightListener() {
     }
 
     @Override
     public void showMsg(String msg) {
         View view = getWindow().getDecorView().findViewById(android.R.id.content);
         SnackbarUtils.with(view).setMessage(msg).show();
+
     }
 
     @Override
@@ -181,6 +211,8 @@ public abstract class BaseActivity<V, P extends BasePresenter> extends RxAppComp
 
         if (isUseLoadService() && mLoadService != null) {
             mLoadService.showCallback(LoadingCallback.class);
+        } else {
+            UiUtils.showLoadDialog(msg);
         }
     }
 
@@ -188,6 +220,8 @@ public abstract class BaseActivity<V, P extends BasePresenter> extends RxAppComp
     public void hideLoading() {
         if (isUseLoadService() && mLoadService != null) {
             mLoadService.showSuccess();
+        } else {
+            UiUtils.dismissLoadDialog();
         }
     }
 
@@ -197,6 +231,8 @@ public abstract class BaseActivity<V, P extends BasePresenter> extends RxAppComp
         if (isUseLoadService() && mLoadService != null) {
             mTvErrorMsg.setText(getString(R.string.txt_net_error_tips));
             mLoadService.showCallback(ErrorCallback.class);
+        } else {
+            UiUtils.dismissLoadDialog();
         }
     }
 
@@ -206,6 +242,21 @@ public abstract class BaseActivity<V, P extends BasePresenter> extends RxAppComp
             //show exception info
             mTvErrorMsg.setText(msg);
             mLoadService.showCallback(ErrorCallback.class);
+        } else {
+            UiUtils.dismissLoadDialog();
+            View view = getWindow().getDecorView().findViewById(android.R.id.content);
+            SnackbarUtils.with(view).setMessage(msg).showWarning();
+        }
+    }
+
+    @Override
+    public void showError(String msg) {
+        if (isUseLoadService() && mLoadService != null) {
+            mLoadService.showCallback(ErrorCallback.class);
+        } else {
+            UiUtils.dismissLoadDialog();
+            View view = getWindow().getDecorView().findViewById(android.R.id.content);
+            SnackbarUtils.with(view).setMessage(msg).showError();
         }
     }
 
@@ -216,7 +267,9 @@ public abstract class BaseActivity<V, P extends BasePresenter> extends RxAppComp
         mLoadService = LoadSir.getDefault().register(o, new Callback.OnReloadListener() {
             @Override
             public void onReload(View v) {
-                mLoadService.showCallback(LoadingCallback.class);
+                if (isUseLoadService()) {
+                    reload();
+                }
             }
         });
 
@@ -226,6 +279,15 @@ public abstract class BaseActivity<V, P extends BasePresenter> extends RxAppComp
                 mTvErrorMsg = view.findViewById(R.id.tv_error_msg);
             }
         });
+        mLoadService.setCallBack(LoadingCallback.class, new Transport() {
+            @Override
+            public void order(Context context, View view) {
+//                ProgressBar pb_callback_loading = view.findViewById(R.id.pb_callback_loading);
+//                Circle doubleBounce = new Circle();
+//                doubleBounce.setColor(R.color.color_333333);
+//                pb_callback_loading.setIndeterminateDrawable(doubleBounce);
+            }
+        });
 
         mLoadService.setCallBack(EmptyCallback.class, new Transport() {
             @Override
@@ -233,6 +295,13 @@ public abstract class BaseActivity<V, P extends BasePresenter> extends RxAppComp
                 mTvEmpty = view.findViewById(R.id.tv_empty);
             }
         });
+    }
+
+    /**
+     * 重试
+     */
+    public void reload() {
+
     }
 
 }

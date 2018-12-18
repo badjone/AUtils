@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-
 /**
  * Created by zhpan on 2017/5/26.
  * Description:

@@ -3,6 +3,7 @@ package com.wugx_autils.base;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -14,12 +15,21 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SnackbarUtils;
 import com.blankj.utilcode.util.Utils;
+import com.kingja.loadsir.callback.Callback;
+import com.kingja.loadsir.core.LoadService;
+import com.kingja.loadsir.core.LoadSir;
+import com.kingja.loadsir.core.Transport;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.trello.rxlifecycle2.components.RxFragment;
 import com.wugx_autils.R;
+import com.wugx_autils.callback.EmptyCallback;
+import com.wugx_autils.callback.ErrorCallback;
+import com.wugx_autils.callback.LoadingCallback;
 import com.wugx_autils.mvp.presenter.BasePresenter;
 import com.wugx_autils.mvp.view.BaseView;
+import com.wugx_autils.util.UiUtils;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -54,7 +64,47 @@ public abstract class BaseFragment<V, T extends BasePresenter<V>> extends RxFrag
         LinearLayout linearLayout = setView(inflater);
         unbinder = ButterKnife.bind(this, linearLayout);
 
-        return linearLayout;
+        if (isUseLoadSir()) {
+            initLoadSir(linearLayout);
+            return loadService.getLoadLayout();
+        } else {
+            return linearLayout;
+        }
+
+    }
+
+    public boolean isUseLoadSir() {
+        return false;
+    }
+
+    private TextView mTvErrorMsg;
+    private TextView mTvEmpty;
+    public LoadService loadService;
+
+    private void initLoadSir(View layoutView) {
+        loadService = LoadSir.getDefault().register(layoutView, new Callback.OnReloadListener() {
+            @Override
+            public void onReload(View v) {
+                // 重新加载逻辑
+                if (isUseLoadSir()) reLoad();
+            }
+        });
+
+        loadService.setCallBack(ErrorCallback.class, new Transport() {
+            @Override
+            public void order(Context context, View view) {
+                mTvErrorMsg = view.findViewById(R.id.tv_error_msg);
+            }
+        });
+        loadService.setCallBack(EmptyCallback.class, new Transport() {
+            @Override
+            public void order(Context context, View view) {
+                mTvEmpty = view.findViewById(R.id.tv_empty);
+            }
+        });
+    }
+
+    public void reLoad() {
     }
 
     /**
@@ -194,6 +244,7 @@ public abstract class BaseFragment<V, T extends BasePresenter<V>> extends RxFrag
         return view.findViewById(resId);
     }
 
+    @LayoutRes
     protected abstract int layoutId();
 
     protected abstract void loadData();
@@ -203,26 +254,63 @@ public abstract class BaseFragment<V, T extends BasePresenter<V>> extends RxFrag
 
     @Override
     public void showError(String msg) {
-
+        if (isUseLoadSir() && loadService != null) {
+            loadService.showCallback(ErrorCallback.class);
+        } else {
+            UiUtils.dismissLoadDialog();
+            View view = getActivity().getWindow().getDecorView().findViewById(android.R.id.content);
+            SnackbarUtils.with(view).setMessage(msg).showWarning();
+        }
     }
 
     @Override
     public void showException(String msg) {
-
+        if (isUseLoadSir() && loadService != null) {
+            loadService.showCallback(ErrorCallback.class);
+        } else {
+            UiUtils.dismissLoadDialog();
+            View view = getActivity().getWindow().getDecorView().findViewById(android.R.id.content);
+            SnackbarUtils.with(view).setMessage(msg).showWarning();
+        }
     }
 
     @Override
     public void showLoading(String msg) {
-        baseActivity.showLoading(msg);
+        if (isUseLoadSir() && loadService != null) {
+            loadService.showCallback(LoadingCallback.class);
+        } else {
+            UiUtils.showLoadDialog(null);
+        }
     }
 
     @Override
     public void hideLoading() {
-        baseActivity.hideLoading();
+        if (isUseLoadSir() && loadService != null) {
+            loadService.showSuccess();
+        } else {
+            UiUtils.dismissLoadDialog();
+        }
     }
 
     @Override
     public void showNetError() {
+        if (isUseLoadSir() && loadService != null) {
+            loadService.showCallback(ErrorCallback.class);
+        } else {
+            UiUtils.dismissLoadDialog();
+            View view = getActivity().getWindow().getDecorView().findViewById(android.R.id.content);
+            SnackbarUtils.with(view).setMessage("网络异常").showWarning();
+        }
+    }
 
+    @Override
+    public void showMsg(String o) {
+        View view = getActivity().getWindow().getDecorView().findViewById(android.R.id.content);
+        SnackbarUtils.with(view).setMessage(o).show();
+    }
+
+    @Override
+    public void showToast(Object o) {
+//        ToastUtils.showShort(String.valueOf(o));
     }
 }

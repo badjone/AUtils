@@ -24,16 +24,16 @@ import retrofit2.HttpException;
  */
 
 public abstract class DefaultObserver<T> implements Observer<T> {
-    private  Disposable mDisposable;
+    public Disposable mDisposable;
+
     @Override
     public void onSubscribe(Disposable d) {
-        mDisposable=d;
+        mDisposable = d;
     }
 
     @Override
     public void onNext(T response) {
         onSuccess(response);
-        onFinish();
     }
 
     @Override
@@ -50,20 +50,21 @@ public abstract class DefaultObserver<T> implements Observer<T> {
                 || e instanceof JSONException
                 || e instanceof ParseException) {   //  解析错误
             onException(ExceptionReason.PARSE_ERROR);
-        }else if(e instanceof ServerResponseException){
+        } else if (e instanceof ServerResponseException) {
             onFail(e.getMessage());
-        }else if (e instanceof NoDataExceptionException){
+        } else if (e instanceof NoDataExceptionException) {
             onSuccess(null);
         } else {
             onException(ExceptionReason.UNKNOWN_ERROR);
         }
         onFinish();
-        if(mDisposable!=null)mDisposable.dispose();
+        if (mDisposable != null) mDisposable.dispose();
     }
 
     @Override
     public void onComplete() {
-        if(mDisposable!=null)mDisposable.dispose();
+        onFinish();
+        if (mDisposable != null) mDisposable.dispose();
     }
 
     /**
@@ -84,7 +85,8 @@ public abstract class DefaultObserver<T> implements Observer<T> {
         ToastUtils.showShort(message);
     }
 
-    public void onFinish(){}
+    public void onFinish() {
+    }
 
     /**
      * 请求异常
@@ -96,7 +98,6 @@ public abstract class DefaultObserver<T> implements Observer<T> {
             case CONNECT_ERROR:
                 ToastUtils.showShort(R.string.connect_error);
                 break;
-
             case CONNECT_TIMEOUT:
                 ToastUtils.showShort(R.string.connect_timeout);
                 break;
@@ -114,7 +115,7 @@ public abstract class DefaultObserver<T> implements Observer<T> {
                 ToastUtils.showShort(R.string.unknown_error);
                 break;
         }
-        if(mDisposable!=null)mDisposable.dispose();
+        if (mDisposable != null) mDisposable.dispose();
     }
 
     /**

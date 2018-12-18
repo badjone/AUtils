@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/AUtils.iml" filepath="$PROJECT_DIR$/AUtils.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/autils/autils.iml" filepath="$PROJECT_DIR$/autils/autils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kotlin_autils/kotlin_autils.iml" filepath="$PROJECT_DIR$/kotlin_autils/kotlin_autils.iml" />
     </modules>
   </component>
 </project>

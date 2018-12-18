@@ -22,7 +22,6 @@ public class TestPresenter extends BasePresenter<TestContract.TestView> {
 
     public void showInfo(){
 
-
         Observable.timer(5, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {

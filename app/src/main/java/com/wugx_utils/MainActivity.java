@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.afollestad.materialdialogs.folderselector.FileChooserDialog;
+import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.FileUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
@@ -26,12 +27,14 @@ import com.wugx_utils.entity.LoginBean;
 import com.wugx_utils.entity.UserInfo;
 import com.wugx_utils.http.RetrofitHelper;
 import com.wugx_utils.http.converter.GsonConverterFactory;
+import com.wugx_utils.test.TestActivity2;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -72,7 +75,7 @@ public class MainActivity extends BaseActivity implements FileChooserDialog.File
 //                    }
 //                });
 
-//                ActivityUtils.startActivity(TestActivity.class);
+                ActivityUtils.startActivity(TestActivity2.class);
 
 
 //                startActivityForResult(CameraUtils.toGallery(), 6);
@@ -96,11 +99,30 @@ public class MainActivity extends BaseActivity implements FileChooserDialog.File
 
                 //测试下载
 //                downLoadApk();
-                testlogin();
+//                testlogin();
 //                initDb();
+
+//                testRxjava();
+
 
             }
         });
+    }
+
+    private void testRxjava() {
+        int[] i = {8, 0, 1, 5};
+        int[] i1 = {5, 3, 9, 8};
+
+        Observable<int[]> o1 = Observable.fromArray(i1).take(2);
+        Observable<int[]> o2 = Observable.fromArray(i);
+//                .subscribe(new Consumer<Integer>() {
+//                    @Override
+//                    public void accept(Serializable serializable) throws Exception {
+//                        LogUtils.d(">>>" + serializable);
+//                    }
+//                });
+
+
     }
 
     private void initDb() {
@@ -162,7 +184,7 @@ public class MainActivity extends BaseActivity implements FileChooserDialog.File
                                     loginBean.getToken(), loginBean.getMemberId(), "c4:0b:cb:84:97:70");
                         } else {
                             //登陆失败
-                            throw new ServerResponseException("登陆异常", "获取登陆用户信息失败");
+                            throw new ServerResponseException("登陆异常", loginBean.getMsg());
                         }
                     }
                 })

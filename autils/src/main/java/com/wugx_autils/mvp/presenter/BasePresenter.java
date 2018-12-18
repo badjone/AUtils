@@ -2,19 +2,26 @@ package com.wugx_autils.mvp.presenter;
 
 import java.lang.ref.WeakReference;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+
 
 /**
  * @author wugx
  * @data 2018/5/30.
  */
 
-public class BasePresenter<T> {
+public class BasePresenter<V> {
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
+    protected WeakReference<V> mReference;
 
-    protected WeakReference<T> mReference;
+    public void attachView(V view) {
+        mReference = new WeakReference<V>(view);
+    }
 
-    public void attachView(T view) {
-        mReference = new WeakReference<T>(view);
+    public void addDisposable(Disposable d) {
+        mCompositeDisposable.add(d);
     }
 
     public void detachView() {
@@ -22,13 +29,13 @@ public class BasePresenter<T> {
             mReference.clear();
             mReference = null;
         }
+        if (!mCompositeDisposable.isDisposed()) {
+            mCompositeDisposable.clear();
+        }
     }
 
-    public T getView() {
+    public V getRootView() {
         return mReference.get();
     }
-
-
-
 
 }

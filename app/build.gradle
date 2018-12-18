@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'org.greenrobot.greendao' // apply plugin
 
 android {
@@ -18,19 +19,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-}
 
+    compileOptions {
+        encoding "UTF-8"
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-//    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-//    testImplementation 'junit:junit:4.12'
-//    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-//    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-
-
-//    annotationProcessor(rootProject.ext.dependencies["butterknife-compiler"]) {
-//        exclude module: 'support-annotations'
-//    }
 
     implementation rootProject.ext.dependencies["butterknife"]
     annotationProcessor rootProject.ext.dependencies["butterknife-compiler"]
@@ -51,18 +53,15 @@ dependencies {
     implementation rootProject.ext.dependencies["design"]
 
 
-    implementation project(':autils')
 
-    implementation (rootProject.ext.dependencies["dialog"]){
+    implementation(rootProject.ext.dependencies["dialog"]) {
         exclude module: 'appcompat-v7'
         exclude module: 'recyclerview-v7'
     }
-    implementation (rootProject.ext.dependencies["dialog-commons"]){
+    implementation(rootProject.ext.dependencies["dialog-commons"]) {
         exclude module: 'appcompat-v7'
         exclude module: 'recyclerview-v7'
     }
-
-
 
     //okHttp3
     implementation rootProject.ext.dependencies["okhttp3"]
@@ -80,5 +79,12 @@ dependencies {
     //    db
     implementation rootProject.ext.dependencies["greendao"]
     implementation rootProject.ext.dependencies["greendao-generator"]
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+
+    implementation project(':autils')
+//    implementation(name: 'autils-release-1.2', ext: 'aar')
+}
+repositories {
+    mavenCentral()
 }

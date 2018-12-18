@@ -42,12 +42,13 @@ public class PermissionApply {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.RECORD_AUDIO
     };
-
+    /**
+     * 读写文件权限
+     */
     public static final String[] FILE_PERMISSION = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
     };
-
 
     @SuppressLint("WrongConstant")
     public static void request(String[] perms, final String permsDesc, final PermissionListener listener) {
@@ -72,6 +73,7 @@ public class PermissionApply {
                         if (permissionsDeniedForever != null && permissionsDeniedForever.size() > 0) {
                             Activity topActivity = ActivityUtils.getTopActivity();
                             if (topActivity != null) {
+                                //拒绝弹窗提示
                                 new MaterialDialog.Builder(topActivity)
                                         .content(String.format(Utils.getApp().getString(R.string.permission_deniedforever_tips), permsDesc))
                                         .contentColor(Utils.getApp().getResources().getColor(android.R.color.holo_red_dark))
@@ -92,7 +94,6 @@ public class PermissionApply {
                                         .show();
                             }
                         }
-
                     }
                 })
                 .request();

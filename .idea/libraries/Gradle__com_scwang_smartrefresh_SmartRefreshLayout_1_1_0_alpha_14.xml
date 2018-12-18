@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.scwang.smartrefresh:SmartRefreshLayout-1.1.0-alpha-14">
     <CLASSES>
-      <root url="jar://E:/studioCache/.gradle/caches/transforms-1/files-1.1/SmartRefreshLayout-1.1.0-alpha-14.aar/ffa422eefe7a8216117beee4e3f24dae/jars/classes.jar!/" />
-      <root url="file://E:/studioCache/.gradle/caches/transforms-1/files-1.1/SmartRefreshLayout-1.1.0-alpha-14.aar/ffa422eefe7a8216117beee4e3f24dae/res" />
+      <root url="file://E:/studioCache/.gradle/caches/transforms-1/files-1.1/SmartRefreshLayout-1.1.0-alpha-14.aar/9c512167f6d220b65b93ca68a9a5f007/res" />
+      <root url="jar://E:/studioCache/.gradle/caches/transforms-1/files-1.1/SmartRefreshLayout-1.1.0-alpha-14.aar/9c512167f6d220b65b93ca68a9a5f007/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

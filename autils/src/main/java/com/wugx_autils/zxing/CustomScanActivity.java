@@ -23,7 +23,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-
 /**
  * 二维码扫描
  * <p>
@@ -89,7 +88,6 @@ public class CustomScanActivity extends AppCompatActivity {
 
     public static boolean isOpen = false;
 
-
     /**
      * 二维码解析回调函数
      */
@@ -136,4 +134,8 @@ public class CustomScanActivity extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

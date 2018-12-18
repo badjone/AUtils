@@ -30,4 +30,5 @@ public class LoadingCallback extends Callback {
     protected boolean onReloadEvent(Context context, View view) {
         return true;
     }
+
 }

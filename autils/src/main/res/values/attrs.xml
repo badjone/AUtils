@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ItemLayout">
+        <attr name="leftTitle" format="string" />
+        <attr name="rightTxt" format="string" />
+        <attr name="icon" format="reference" />
+        <attr name="isShowMoreIcon" format="boolean" />
+    </declare-styleable>
+
+</resources>

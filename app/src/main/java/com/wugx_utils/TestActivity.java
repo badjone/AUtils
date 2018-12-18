@@ -29,7 +29,6 @@ public class TestActivity extends BaseActivity<TestView, TestPresenter> implemen
         showLoading("---");
         LogUtils.d("test>>initData");
         presenter.showInfo();
-
     }
 
     @Override
@@ -47,6 +46,8 @@ public class TestActivity extends BaseActivity<TestView, TestPresenter> implemen
         LogUtils.d("test>>showDatas");
         hideLoading();
         mTvTestInfo.setText(result);
+
+
     }
 
     @Override

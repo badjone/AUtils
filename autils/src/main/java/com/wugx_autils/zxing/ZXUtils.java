@@ -22,12 +22,12 @@ import com.wugx_autils.util.PermissionApply;
  * 二维码扫描工具类
  * <p>
  * <p>
- * (1.注意添加相机权限 2.在onActivityResult中调用onResult)
+ * (1.注意添加相机权限
+ * 2.在onActivityResult中调用{@link #onResult(int, Intent, ZXListener)})
  *
  * @author wugx
  * @data 2018/1/5.
  */
-
 public class ZXUtils {
     /**
      * 扫描跳转Activity RequestCode

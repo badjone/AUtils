@@ -518,7 +518,7 @@ public class CameraUtils {
      * @param data
      * @param listener
      */
-    public static void getVideoDataResult(int resultCode, Intent data, VideoDataListener listener) {
+    public static void getTakeVideo2(int resultCode, Intent data, VideoDataListener listener) {
         if (listener == null) return;
         String currentInputVideoPath;
         //录制视频

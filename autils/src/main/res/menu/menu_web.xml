@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_1"
+        android:orderInCategory="80"
+        android:title="其他浏览器"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_2"
+        android:orderInCategory="80"
+        android:title="复制url"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_3"
+        android:orderInCategory="80"
+        android:title="刷新"
+        app:showAsAction="never"/>
+</menu>

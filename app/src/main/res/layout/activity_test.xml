@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,5 +10,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="----"/>
+
+    <TextView
+        android:id="@+id/tv_test_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray_999999"
+        android:text="make"
+        app:layout_constraintTop_toBottomOf="@+id/tv_test_info"/>
 
 </android.support.constraint.ConstraintLayout>
