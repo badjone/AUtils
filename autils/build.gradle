@@ -117,7 +117,7 @@ publish {
     userOrg = 'badjone654987'//bintray.com的用户名
     groupId = 'com.wugx'//jcenter上的路径
     artifactId = 'autils'//项目名称
-    publishVersion = '1.0.6'//版本号
+    publishVersion = '1.0.9'//版本号
     desc = 'android utils'//描述，不重要
     website = siteUrl//项目主页
 }
